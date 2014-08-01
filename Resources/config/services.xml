@@ -7,14 +7,26 @@
     <parameters>
         <parameter key="ydle.settings.roomtype.controller.class">Ydle\SettingsBundle\Controller\RoomTypeController</parameter>
         <parameter key="ydle.settings.nodetype.controller.class">Ydle\SettingsBundle\Controller\NodeTypeController</parameter>
+        <parameter key="ydle.settings.logs.controller.class">Ydle\SettingsBundle\Controller\LogsController</parameter>
+        <parameter key="ydle.settings.nodes.controller.class">Ydle\SettingsBundle\Controller\NodeController</parameter>
     </parameters>
 
     <services>
         <service id="ydle.settings.roomtype.controller" class="Ydle\SettingsBundle\Controller\RoomTypeController">
             <argument type="service" id="ydle.roomtype.manager" />
+            <argument type="service" id="service_container" />
         </service>
         <service id="ydle.settings.nodetype.controller" class="%ydle.settings.nodetype.controller.class%">
             <argument type="service" id="ydle.nodetype.manager" />
+            <argument type="service" id="service_container" />
+        </service>
+        <service id="ydle.settings.logs.controller" class="%ydle.settings.logs.controller.class%">
+            <argument type="service" id="ydle.logger" />
+            <argument type="service" id="service_container" />
+        </service>
+        <service id="ydle.settings.nodes.controller" class="%ydle.settings.nodes.controller.class%">
+            <argument type="service" id="ydle.node.manager" />
+            <argument type="service" id="service_container" />
         </service>
     </services>
 

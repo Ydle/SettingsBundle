@@ -6,4 +6,6 @@
 
     <import type="rest" resource="ydle.settings.roomtype.controller" name-prefix="ydle_api_" />
     <import type="rest" resource="ydle.settings.nodetype.controller" name-prefix="ydle_api_" />
+    <import type="rest" resource="ydle.settings.logs.controller" name-prefix="ydle_api_" />
+    <import type="rest" resource="ydle.settings.nodes.controller" name-prefix="ydle_api_" />
 </routes>

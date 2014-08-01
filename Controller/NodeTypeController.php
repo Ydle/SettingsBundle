@@ -4,6 +4,7 @@ namespace Ydle\SettingsBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\DependencyInjection\Container;
 use FOS\RestBundle\Request\ParamFetcher;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use FOS\RestBundle\View\RouteRedirectView,
@@ -19,9 +20,12 @@ class NodeTypeController extends Controller
      */
     protected $nodeTypeManager;
     
-    public function __construct(\Ydle\NodesBundle\Manager\NodeTypeManager $nodeTypeManager)
+    protected $container;
+    
+    public function __construct(\Ydle\NodesBundle\Manager\NodeTypeManager $nodeTypeManager, Container $container)
     {
         $this->nodeTypeManager = $nodeTypeManager;
+        $this->container = $container;
     }
     
     /**
@@ -78,6 +82,13 @@ class NodeTypeController extends Controller
         if(!$result = $this->getNodeTypeManager()->changeState($nodetypeId, $state)){
             throw new HttpException(404, 'This node type does not exist');
         }
+        if($state == 1){            
+            $message = $this->getTranslator()->trans('nodetype.activate.success');
+            $this->getLogger()->log('info', $message, 'hub');
+        } elseif($state == 0){            
+            $message = $this->getTranslator()->trans('nodetype.deactivate.success');
+            $this->getLogger()->log('info', $message, 'hub');
+        }
         
         return $result;
     }
@@ -97,6 +108,9 @@ class NodeTypeController extends Controller
         }
         $result = $this->getNodeTypeManager()->delete($object);
         
+        $message = $this->getTranslator()->trans('nodetype.delete.success');
+        $this->getLogger()->log('info', $message, 'hub');
+        
         return $result;
     }
     
@@ -106,6 +120,22 @@ class NodeTypeController extends Controller
     private function getNodeTypeManager()
     {
         return $this->nodeTypeManager;
+    }
+    
+    /**
+     * Wrapper for translator
+     */
+    private function getTranslator()
+    {
+        return $this->container->get('translator');
+    }
+    
+    /**
+     * Wrapper for logger
+     */
+    private function getLogger()
+    {
+        return $this->container->get('ydle.logger');
     }
     
     /**

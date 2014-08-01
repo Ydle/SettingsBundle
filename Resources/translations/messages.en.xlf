@@ -1,43 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
-  <file date="2014-07-28T14:21:58Z" source-language="en" target-language="fr" datatype="plaintext" original="not.available">
+  <file date="2014-07-28T14:21:58Z" source-language="en" target-language="en" datatype="plaintext" original="not.available">
     <header>
       <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
       <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
     </header>
     <body>
-      <trans-unit id="937739c372a36f54004835db7837a5d241693c38" resname="Symfony2 is great">
-        <source>Symfony2 is great</source>
-        <target>J'aime Symfony2</target>
-      </trans-unit>
       <trans-unit id="d39e72e61cefcbe4b87d020d38f3fe2b2b5d3d14" resname="nodetype.activate.success">
         <source>nodetype.activate.success</source>
-        <target state="new">nodetype.activate.success</target>
+        <target state="new">Node type activated</target>
         <jms:reference-file line="86">SettingsBundle/Controller/NodeTypeController.php</jms:reference-file>
       </trans-unit>
       <trans-unit id="7c7fea624460328c268e181b6bbf7b077e429bf7" resname="nodetype.deactivate.success">
         <source>nodetype.deactivate.success</source>
-        <target state="new">nodetype.deactivate.success</target>
+        <target state="new">Node type deactivated</target>
         <jms:reference-file line="89">SettingsBundle/Controller/NodeTypeController.php</jms:reference-file>
       </trans-unit>
       <trans-unit id="57e9111d00d53a1d4845ba609bd3571212581de3" resname="nodetype.delete.success">
         <source>nodetype.delete.success</source>
-        <target state="new">nodetype.delete.success</target>
+        <target state="new">Node type deleted successfully</target>
         <jms:reference-file line="111">SettingsBundle/Controller/NodeTypeController.php</jms:reference-file>
       </trans-unit>
       <trans-unit id="b1aed1aac3fc2506c53ee95026ec0ba92ae30843" resname="roomtype.activate.success">
         <source>roomtype.activate.success</source>
-        <target state="new">roomtype.activate.success</target>
+        <target state="new">Room type activated</target>
         <jms:reference-file line="86">SettingsBundle/Controller/RoomTypeController.php</jms:reference-file>
       </trans-unit>
       <trans-unit id="d1a80c8367cbe67fbbdece649802afdb9b387aae" resname="roomtype.deactivate.success">
         <source>roomtype.deactivate.success</source>
-        <target state="new">roomtype.deactivate.success</target>
+        <target state="new">Room type deactivated</target>
         <jms:reference-file line="89">SettingsBundle/Controller/RoomTypeController.php</jms:reference-file>
       </trans-unit>
       <trans-unit id="8220217a203c22b8eda88a66368ddf9e4f463431" resname="roomtype.delete.success">
         <source>roomtype.delete.success</source>
-        <target state="new">roomtype.delete.success</target>
+        <target state="new">Room type deleted successfully</target>
         <jms:reference-file line="111">SettingsBundle/Controller/RoomTypeController.php</jms:reference-file>
       </trans-unit>
     </body>

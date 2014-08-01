@@ -4,6 +4,7 @@ namespace Ydle\SettingsBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\DependencyInjection\Container;
 use FOS\RestBundle\Request\ParamFetcher;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use FOS\RestBundle\View\RouteRedirectView,
@@ -19,9 +20,12 @@ class RoomTypeController extends Controller
      */
     protected $roomTypeManager;
     
-    public function __construct(\Ydle\RoomBundle\Manager\RoomTypeManager $roomTypeManager)
+    protected $container;
+    
+    public function __construct(\Ydle\RoomBundle\Manager\RoomTypeManager $roomTypeManager, Container $container)
     {
         $this->roomTypeManager = $roomTypeManager;
+        $this->container = $container;
     }
     
     /**
@@ -78,6 +82,13 @@ class RoomTypeController extends Controller
         if(!$result = $this->getRoomTypeManager()->changeState($roomtypeId, $state)){
             throw new HttpException(404, 'This room type does not exist');
         }
+        if($state == 1){            
+            $message = $this->getTranslator()->trans('roomtype.activate.success');
+            $this->getLogger()->log('info', $message, 'hub');
+        } elseif($state == 0){            
+            $message = $this->getTranslator()->trans('roomtype.deactivate.success');
+            $this->getLogger()->log('info', $message, 'hub');
+        }
         
         return $result;
     }
@@ -97,6 +108,9 @@ class RoomTypeController extends Controller
         }
         $result = $this->getRoomTypeManager()->delete($object);
         
+        $message = $this->get('translator')->trans('roomtype.delete.success');
+        $this->get('ydle.logger')->log('info', $message, 'hub');
+        
         return $result;
     }
     
@@ -106,6 +120,22 @@ class RoomTypeController extends Controller
     private function getRoomTypeManager()
     {
         return $this->roomTypeManager;
+    }
+    
+    /**
+     * Wrapper for translator
+     */
+    private function getTranslator()
+    {
+        return $this->container->get('translator');
+    }
+    
+    /**
+     * Wrapper for logger
+     */
+    private function getLogger()
+    {
+        return $this->container->get('ydle.logger');
     }
     
     /**
