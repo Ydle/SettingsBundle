@@ -11,7 +11,7 @@ use FOS\RestBundle\View\RouteRedirectView,
     FOS\RestBundle\View\View,
     FOS\RestBundle\Controller\Annotations\QueryParam,
     FOS\RestBundle\Request\ParamFetcherInterface;
-use Ydle\NodesBundle\Manager\RoomTypeManager;
+use Ydle\NodesBundle\Manager\RoomManager;
 
 class RoomController extends Controller
 {    
@@ -29,7 +29,7 @@ class RoomController extends Controller
     }
     
     /**
-     * Retrieve the list of available node types
+     * Retrieve the list of available rooms
      * 
      * @QueryParam(name="page", requirements="\d+", default="0", description="Number of page")
      * @QueryParam(name="count", requirements="\d+", default="0", description="Number of room by page")
@@ -74,5 +74,49 @@ class RoomController extends Controller
         }
 
         return $criteria;
+    }
+    
+    /**
+     * 
+     * @QueryParam(name="room_id", requirements="\d+", default="0", description="Id of the room")
+     * @QueryParam(name="state", requirements="\d+", default="1", description="New state for this room")
+     * 
+     * @param \FOS\RestBundle\Request\ParamFetcher $paramFetcher
+     */
+    public function putRoomStateAction(ParamFetcher $paramFetcher)
+    {
+        $roomId = $paramFetcher->get('room_id');
+        $state = $paramFetcher->get('state');
+        
+        if(!$result = $this->getRoomManager()->changeState($roomId, $state)){
+            throw new HttpException(404, 'This room does not exist');
+        }
+        if($state == 1){            
+            $message = $this->getTranslator()->trans('room.activate.success');
+            $this->getLogger()->log('info', $message, 'hub');
+        } elseif($state == 0){            
+            $message = $this->getTranslator()->trans('room.deactivate.success');
+            $this->getLogger()->log('info', $message, 'hub');
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * 
+     * @QueryParam(name="room_id", requirements="\d+", default="0", description="Id of the room")
+     * 
+     * @param \FOS\RestBundle\Request\ParamFetcher $paramFetcher
+     */
+    public function deleteRoomAction(ParamFetcher $paramFetcher)
+    {
+        $roomId = $paramFetcher->get('room_id');        
+        
+        if(!$object = $this->getRoomManager()->find($roomId)){
+            throw new HttpException(404, 'This room does not exist');
+        }
+        $result = $this->getRoomManager()->delete($object);
+        
+        return $result;
     }
 }
