@@ -12,9 +12,11 @@ use FOS\RestBundle\View\RouteRedirectView,
     FOS\RestBundle\Controller\Annotations\QueryParam,
     FOS\RestBundle\Request\ParamFetcherInterface;
 use Ydle\NodesBundle\Manager\NodeTypeManager;
+use Ydle\HubBundle\Entity\NodeData;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class NodeController extends Controller
-{    
+{
     /**
      * @var CategoryManagerInterface
      */
@@ -148,7 +150,7 @@ class NodeController extends Controller
             throw new HttpException(404, $message);
         }
 
-        if(!$type = $this->getNodeTypeManager()->find($typeId)){          
+        if(!$type = $this->getNodeTypeManager()->find($type)){          
             $message = $this->getTranslator()->trans('nodetype.not.found');
             throw new HttpException(404, $message);
         }
@@ -158,10 +160,18 @@ class NodeController extends Controller
             throw new HttpException(404, $message);
         }
         
-        var_dump($nodeCode);
-        var_dump($nodeCode);
-        var_dump($nodeCode);
-        die;
+        $nodeData = new NodeData();
+        $nodeData->setNode($node);
+        $nodeData->setData($data);
+        $nodeData->setType($type);
+        
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($nodeData);
+        $em->flush();
+        
+        $this->get('ydle.logger')->log('data', 'Data received from node #'.$sender.' : '.$data, 'node');
+        
+        return new JsonResponse(array('code' => 0, 'result' => 'data sent'));
 
     }
     
