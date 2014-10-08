@@ -82,6 +82,11 @@ class NodeController extends Controller
     {
         return $this->container->get('ydle.nodetype.manager');
     }
+
+    private function getNodeDataManager()
+    {
+        return $this->container->get('ydle.data.manager');
+    }
     
     /**
     * Filters criteria from $paramFetcher to be compatible with the Pager criteria
@@ -131,7 +136,8 @@ class NodeController extends Controller
         
         return $result;
     }
-        /**
+        
+    /**
      * 
      * @QueryParam(name="sender", requirements="\d+", default="0", description="Code of the node sending data")
      * @QueryParam(name="type", requirements="\d+", default="0", description="type of data sent")
@@ -173,6 +179,69 @@ class NodeController extends Controller
         
         return new JsonResponse(array('code' => 0, 'result' => 'data sent'));
 
+    }
+
+
+    /**
+     *
+     * @QueryParam(name="node", requirements="\d+", default="0", description="Code of the node")
+     * @QueryParam(name="filter", requirements="\w+", default="day", description="date filter")
+     * 
+     * @param \FOS\RestBundle\Request\ParamFetcher $paramFetcher
+     */
+    public function getRoomNodeStatsAction(ParamFetcher $paramFetcher)
+    {
+        $code = $paramFetcher->get('node');
+        $filter = $paramFetcher->get('filter');
+
+        if(!$node = $this->getNodeManager()->findOneBy(array('code' => $code))){
+            $message = $this->getTranslator()->trans('node.not.found');
+            throw new HttpException(404, $message);
+        }
+        
+        // Manage starting date
+        $startTime = 0;
+        switch($filter){
+            case 'month':
+                $startTime = strtotime("-1 month");
+                break;
+            case 'week':
+                $startTime = strtotime("-1 week");
+                break;
+            default:
+            case 'day':
+                $startTime = strtotime("-1 day");
+                break;
+        }
+        $startDate = new \DateTime();
+        $startDate->setTimestamp($startTime);
+        
+        $params = array(
+            'node_id' => $node->getId(),
+            'room_id' => $node->getRoom()->getId(),
+	    'start_date' => $startDate
+        );
+        $datas = $this->getNodeDataManager()->findByParams($params);
+
+        $result = array();
+        foreach($datas as $data)
+        {
+            $type = $data->getType();
+            if(empty($result[$type->getId()])) {
+                $result[$type->getId()] = array(
+                    'label' => $type->getName().' ('. $type->getUnit().')',
+                    'data' => array(),
+                );
+            }
+            $value = $data->getData();
+            switch($type->getUnit()){
+                case '°C':
+                    $value = round($value / 100, 1);
+            }
+            $result[$type->getId()]['data'][] = array((int)$data->getCreated()->format('U') * 1000, $value);
+        }
+        //return new JsonResponse(array(array('label'=>'test', 'data' => array(array(1,10), array(2, 12)))));
+        return new JsonResponse($result);
     }
     
     public function getTranslator(){
