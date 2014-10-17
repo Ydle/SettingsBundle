@@ -224,6 +224,7 @@ class NodeController extends Controller
         $datas = $this->getNodeDataManager()->findByParams($params);
 
         $result = array();
+        $cpt = 1;
         foreach($datas as $data)
         {
             $type = $data->getType();
@@ -231,14 +232,17 @@ class NodeController extends Controller
                 $result[$type->getId()] = array(
                     'label' => $type->getName().' ('. $type->getUnit().')',
                     'data' => array(),
+                    'yaxis' => $cpt
                 );
             }
             $value = $data->getData();
             switch($type->getUnit()){
                 case '°C':
+                case '%':
                     $value = round($value / 100, 1);
             }
             $result[$type->getId()]['data'][] = array((int)$data->getCreated()->format('U') * 1000, $value);
+            $cpt++;
         }
         //return new JsonResponse(array(array('label'=>'test', 'data' => array(array(1,10), array(2, 12)))));
         return new JsonResponse($result);
