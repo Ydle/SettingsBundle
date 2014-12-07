@@ -319,6 +319,7 @@ class NodeController extends Controller
         $address .= $masterCode;
 
         $ch = curl_init($address);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_exec($ch);
         curl_close($ch);
         $message = $this->getTranslator()->trans('node.link.success', array('%nodeCode%' => $node->getCode()));
