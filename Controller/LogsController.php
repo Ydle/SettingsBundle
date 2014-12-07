@@ -11,6 +11,7 @@ use FOS\RestBundle\View\RouteRedirectView,
     FOS\RestBundle\View\View,
     FOS\RestBundle\Controller\Annotations\QueryParam,
     FOS\RestBundle\Request\ParamFetcherInterface;
+use FOS\RestBundle\Controller\Annotations\Post;
 use Ydle\LogsBundle\Manager\LogsManager;
 
 class LogsController extends Controller
@@ -25,6 +26,27 @@ class LogsController extends Controller
     {
         $this->logsManager = $logsManager;
         $this->container = $container;
+    }
+
+    /**
+     * Allow to create log for master
+     * 
+     * @QueryParam(name="message", requirements="\w+", default="test", description="message")
+     * @QueryParam(name="level", requirements="\w+", default="info", description="level")
+     * @Post("/api/log/add")
+     */
+    public function postApiLogAction(ParamFetcher $paramFetcher)
+    {
+        $message = $paramFetcher->get('message');
+        $level = $paramFetcher->get('level');
+
+file_put_contents('/var/www/manuel/htdocs/ydletest/debug_ydle.txt', $message);
+
+        if(empty($message)){             
+            $error = $this->getTranslator()->trans('log.empty.message');
+            throw new HttpException(404, $error);
+        } 
+    	$this->getLogger()->log($level, $message, 'master'); 
     }
     
     /**
