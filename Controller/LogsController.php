@@ -40,8 +40,6 @@ class LogsController extends Controller
         $message = $paramFetcher->get('message');
         $level = $paramFetcher->get('level');
 
-file_put_contents('/var/www/manuel/htdocs/ydletest/debug_ydle.txt', $message);
-
         if(empty($message)){             
             $error = $this->getTranslator()->trans('log.empty.message');
             throw new HttpException(404, $error);
