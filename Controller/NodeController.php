@@ -11,7 +11,7 @@ use FOS\RestBundle\View\RouteRedirectView,
     FOS\RestBundle\View\View,
     FOS\RestBundle\Controller\Annotations\QueryParam,
     FOS\RestBundle\Request\ParamFetcherInterface;
-use Ydle\NodesBundle\Manager\NodeTypeManager;
+use Ydle\HubBundle\Manager\NodeTypeManager;
 use Ydle\HubBundle\Entity\NodeData;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -24,7 +24,7 @@ class NodeController extends Controller
     
     protected $container;
     
-    public function __construct(\Ydle\NodesBundle\Manager\NodeManager $nodeTypeManager, Container $container)
+    public function __construct(\Ydle\HubBundle\Manager\NodeManager $nodeTypeManager, Container $container)
     {
         $this->nodeManager = $nodeTypeManager;
         $this->container = $container;
@@ -250,6 +250,14 @@ class NodeController extends Controller
     
     public function getTranslator(){
         return $this->container->get('translator');
+    }
+    
+    /**
+     * Wrapper for logger
+     */
+    private function getLogger()
+    {
+        return $this->container->get('ydle.logger');
     }
     
     /**

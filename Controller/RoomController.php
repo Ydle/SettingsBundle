@@ -11,7 +11,7 @@ use FOS\RestBundle\View\RouteRedirectView,
     FOS\RestBundle\View\View,
     FOS\RestBundle\Controller\Annotations\QueryParam,
     FOS\RestBundle\Request\ParamFetcherInterface;
-use Ydle\NodesBundle\Manager\RoomManager;
+use Ydle\HubBundle\Manager\RoomManager;
 
 class RoomController extends Controller
 {    
@@ -100,6 +100,19 @@ class RoomController extends Controller
         }
         
         return $result;
+    }
+    
+    private function getTranslator()
+    {
+        return $this->container->get('translator');
+    }
+    
+    /**
+     * Wrapper for logger
+     */
+    private function getLogger()
+    {
+        return $this->container->get('ydle.logger');
     }
     
     /**

@@ -11,7 +11,7 @@ use FOS\RestBundle\View\RouteRedirectView,
     FOS\RestBundle\View\View,
     FOS\RestBundle\Controller\Annotations\QueryParam,
     FOS\RestBundle\Request\ParamFetcherInterface;
-use Ydle\NodesBundle\Manager\NodeTypeManager;
+use Ydle\HubBundle\Manager\NodeTypeManager;
 
 class NodeTypeController extends Controller
 {    
@@ -22,7 +22,7 @@ class NodeTypeController extends Controller
     
     protected $container;
     
-    public function __construct(\Ydle\NodesBundle\Manager\NodeTypeManager $nodeTypeManager, Container $container)
+    public function __construct(\Ydle\HubBundle\Manager\NodeTypeManager $nodeTypeManager, Container $container)
     {
         $this->nodeTypeManager = $nodeTypeManager;
         $this->container = $container;
