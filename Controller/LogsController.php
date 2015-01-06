@@ -12,7 +12,7 @@ use FOS\RestBundle\View\RouteRedirectView,
     FOS\RestBundle\Controller\Annotations\QueryParam,
     FOS\RestBundle\Request\ParamFetcherInterface;
 use FOS\RestBundle\Controller\Annotations\Post;
-use Ydle\LogsBundle\Manager\LogsManager;
+use Ydle\HubBundle\Manager\LogsManager;
 
 class LogsController extends Controller
 {
@@ -22,7 +22,7 @@ class LogsController extends Controller
     protected $logsManager;
     protected $container;
     
-    public function __construct(\Ydle\LogsBundle\Manager\LogsManager $logsManager, Container $container)
+    public function __construct(\Ydle\HubBundle\Manager\LogsManager $logsManager, Container $container)
     {
         $this->logsManager = $logsManager;
         $this->container = $container;
