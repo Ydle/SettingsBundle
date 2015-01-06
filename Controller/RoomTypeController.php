@@ -22,7 +22,7 @@ class RoomTypeController extends Controller
     
     protected $container;
     
-    public function __construct(\Ydle\RoomBundle\Manager\RoomTypeManager $roomTypeManager, Container $container)
+    public function __construct(\Ydle\HubBundle\Manager\RoomTypeManager $roomTypeManager, Container $container)
     {
         $this->roomTypeManager = $roomTypeManager;
         $this->container = $container;

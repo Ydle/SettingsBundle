@@ -19,7 +19,7 @@ class SettingsController extends Controller
      */
     protected $roomTypeManager;
     
-    public function __construct(\Ydle\RoomBundle\Manager\RoomTypeManager $roomTypeManager)
+    public function __construct(\Ydle\HubBundle\Manager\RoomTypeManager $roomTypeManager)
     {
         $this->roomTypeManager = $roomTypeManager;
     }
